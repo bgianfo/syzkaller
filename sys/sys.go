@@ -15,4 +15,5 @@ import (
 	_ "github.com/google/syzkaller/sys/test/gen"
 	_ "github.com/google/syzkaller/sys/trusty/gen"
 	_ "github.com/google/syzkaller/sys/windows/gen"
+	_ "github.com/google/syzkaller/sys/serenityos/gen"
 )

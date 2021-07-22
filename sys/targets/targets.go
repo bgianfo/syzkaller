@@ -114,16 +114,17 @@ type Timeouts struct {
 }
 
 const (
-	Akaros  = "akaros"
-	FreeBSD = "freebsd"
-	Darwin  = "darwin"
-	Fuchsia = "fuchsia"
-	Linux   = "linux"
-	NetBSD  = "netbsd"
-	OpenBSD = "openbsd"
-	TestOS  = "test"
-	Trusty  = "trusty"
-	Windows = "windows"
+	Akaros     = "akaros"
+	FreeBSD    = "freebsd"
+	Darwin     = "darwin"
+	Fuchsia    = "fuchsia"
+	Linux      = "linux"
+	NetBSD     = "netbsd"
+	OpenBSD    = "openbsd"
+	TestOS     = "test"
+	Trusty     = "trusty"
+	Windows    = "windows"
+	SerenityOS = "serenityos"
 
 	AMD64               = "amd64"
 	ARM64               = "arm64"
@@ -444,6 +445,21 @@ var List = map[string]map[string]*Target{
 			NeedSyscallDefine: dontNeedSyscallDefine,
 		},
 	},
+	SerenityOS: {
+		I386: {
+			VMArch:   AMD64,
+			PtrSize:  4,
+			PageSize: 4 << 10,
+			// The default DataOffset doesn't work with 32-bit
+			// FreeBSD and using ld.lld due to collisions.
+			DataOffset:     256 << 20,
+			Int64Alignment: 4,
+			LittleEndian:   true,
+			CCompiler:      "gcc",
+			CFlags:         []string{"-m32"},
+			NeedSyscallDefine: dontNeedSyscallDefine,
+		},
+        },
 }
 
 var oses = map[string]osCommon{
@@ -533,6 +549,17 @@ var oses = map[string]osCommon{
 		Int64SyscallArgs: true,
 		SyscallPrefix:    "__NR_",
 	},
+	SerenityOS: {
+		BuildOS:                Linux,
+		SyscallNumbers:         true,
+		SyscallPrefix:          "SYS_",
+		ExecutorUsesShmem:      false,
+		ExecutorUsesForkServer: true,
+		HostFuzzer:             true,
+		KernelObject:           "Kernel",
+		CPP:                    "g++",
+	},
+
 }
 
 var (
